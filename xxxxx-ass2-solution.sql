@@ -88,28 +88,13 @@ is
   -- Add to your database four DINER records and their associated FS_DINER
   -- records
 
-  select
-    *
-  from
-    diner;
-
-  select
-    *
-  from
-    fs_diner;
-
-  select
-    *
-  from
-    fooditem;
-
   -- diner 1
   insert
   into
     diner values
     (
-      1,0,3,
-      to_date('08-MAY-2017 11:30:15 PM','dd-Mon-yyyy hh:mi:ss PM'),
+      1,0,2,
+      to_date('03-MAY-2017 11:31:15 PM','dd-Mon-yyyy hh:mi:ss PM'),
       null,
       1
     );
@@ -125,13 +110,14 @@ is
         from
           fooditem
         where
-          food_name = 'Bruschetta'
+          food_name = 'Arancini Balls'
       )
       ,
       'ST',
-      1,
+      2,
       'O'
     );
+    
   insert
   into
     fs_diner values
@@ -146,10 +132,11 @@ is
           food_name = 'Braised Beef Brisket'
       )
       ,
-      'LG',
+      'SM',
       2,
       'O'
     );
+    
   insert
   into
     fs_diner values
@@ -161,11 +148,11 @@ is
         from
           fooditem
         where
-          food_name = 'Spaghetti Marinara'
+          food_name = 'Corona Beer'
       )
       ,
       'ST',
-      1,
+      2,
       'O'
     );
 
@@ -182,7 +169,7 @@ is
       from
         fooditem
       where
-        food_name = 'Bruschetta'
+        food_name = 'Arancini Balls'
     )
   and food_serve_size = 'ST';
 
@@ -201,7 +188,7 @@ is
       where
         food_name = 'Braised Beef Brisket'
     )
-  and food_serve_size = 'LG';
+  and food_serve_size = 'SM';
 
   update
     fs_diner
@@ -216,20 +203,9 @@ is
       from
         fooditem
       where
-        food_name = 'Spaghetti Marinara'
+        food_name = 'Corona Beer'
     )
   and food_serve_size = 'ST';
-
-  select
-    sum(food_serve_cost*fs_diner_no_serves)
-  from
-    food_serve s
-  join fs_diner f
-  on
-    s.food_item_no      = f.food_item_no
-  and s.food_serve_size = f.food_serve_size
-  where
-    diner_no = 1;
 
   update
     diner
@@ -253,7 +229,7 @@ is
   update
     diner
   set
-    diner_completed = to_date('08-MAY-2017 1:03:45 PM',
+    diner_completed = to_date('03-MAY-2017 1:03:45 PM',
     'dd-Mon-yyyy hh:mi:ss PM')
   where
     diner_no = 1;
@@ -264,7 +240,7 @@ is
   into
     diner values
     (
-      3,0,1,
+      4,0,1,
       to_date('08-MAY-2017 1:19:30 PM','dd-Mon-yyyy hh:mi:ss PM'),
       null,
       1
@@ -274,25 +250,7 @@ is
   into
     fs_diner values
     (
-      3,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'Arancini Balls'
-      )
-      ,
-      'ST',
-      2,
-      'O'
-    );
-  insert
-  into
-    fs_diner values
-    (
-      3,
+      4,
       (
         select
           food_item_no
@@ -306,30 +264,31 @@ is
       1,
       'O'
     );
-
-  update
-    fs_diner
-  set
-    fs_diner_item_served = 'S'
-  where
-    diner_no       = 3
-  and food_item_no =
+  insert
+  into
+    fs_diner values
     (
-      select
-        food_item_no
-      from
-        fooditem
-      where
-        food_name = 'Arancini Balls'
-    )
-  and food_serve_size = 'ST';
+     4,
+      (
+        select
+          food_item_no
+        from
+          fooditem
+        where
+          food_name = 'Bruschetta'
+      )
+      ,
+      'ST',
+      2,
+      'O'
+    );
 
   update
     fs_diner
   set
     fs_diner_item_served = 'S'
   where
-    diner_no       = 3
+    diner_no       = 4
   and food_item_no =
     (
       select
@@ -341,111 +300,6 @@ is
     )
   and food_serve_size = 'ST';
 
-  select
-    sum(food_serve_cost*fs_diner_no_serves)
-  from
-    food_serve s
-  join fs_diner f
-  on
-    s.food_item_no      = f.food_item_no
-  and s.food_serve_size = f.food_serve_size
-  where
-    diner_no = 3;
-
-  update
-    diner
-  set
-    diner_payment_due =
-    (
-      select
-        sum(food_serve_cost*fs_diner_no_serves)
-      from
-        food_serve s
-      join fs_diner f
-      on
-        s.food_item_no      = f.food_item_no
-      and s.food_serve_size = f.food_serve_size
-      where
-        diner_no = 3
-    )
-  where
-    diner_no = 3;
-
-  update
-    diner
-  set
-    diner_completed = to_date('08-MAY-2017 2:35:32 PM',
-    'dd-Mon-yyyy hh:mi:ss PM')
-  where
-    diner_no = 3;
-  commit;
-
-  -- diner 3
-  insert
-  into
-    diner values
-    (
-      4,0,3,
-      to_date('09-MAY-2017 10:30:17 AM','dd-Mon-yyyy hh:mi:ss PM'),
-      null,
-      1
-    );
-
-  insert
-  into
-    fs_diner values
-    (
-      4,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'Sticky Date Pudding'
-      )
-      ,
-      'ST',
-      1,
-      'O'
-    );
-  insert
-  into
-    fs_diner values
-    (
-      4,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'Ravioli Ricotta'
-      )
-      ,
-      'SM',
-      2,
-      'O'
-    );
-  insert
-  into
-    fs_diner values
-    (
-      4,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'House White (Glass)'
-      )
-      ,
-      'ST',
-      1,
-      'O'
-    );
-
   update
     fs_diner
   set
@@ -459,54 +313,9 @@ is
       from
         fooditem
       where
-        food_name = 'Sticky Date Pudding'
+        food_name = 'Bruschetta'
     )
   and food_serve_size = 'ST';
-
-  update
-    fs_diner
-  set
-    fs_diner_item_served = 'S'
-  where
-    diner_no       = 4
-  and food_item_no =
-    (
-      select
-        food_item_no
-      from
-        fooditem
-      where
-        food_name = 'Ravioli Ricotta'
-    )
-  and food_serve_size = 'SM';
-
-  update
-    fs_diner
-  set
-    fs_diner_item_served = 'S'
-  where
-    diner_no       = 4
-  and food_item_no =
-    (
-      select
-        food_item_no
-      from
-        fooditem
-      where
-        food_name = 'House White (Glass)'
-    )
-  and food_serve_size = 'ST';
-
-  select
-    sum(food_serve_cost*fs_diner_no_serves)
-  from
-    food_serve s
-  join fs_diner f
-  on
-    s.food_item_no      = f.food_item_no
-  and s.food_serve_size = f.food_serve_size
-  where
-    diner_no = 4;
 
   update
     diner
@@ -530,10 +339,155 @@ is
   update
     diner
   set
-    diner_completed = to_date('09-MAY-2017 12:05:00 PM',
+    diner_completed = to_date('08-MAY-2017 2:35:32 PM',
     'dd-Mon-yyyy hh:mi:ss PM')
   where
     diner_no = 4;
+  commit;
+
+  -- diner 3
+  insert
+  into
+    diner values
+    (
+      6,0,1,
+      to_date('11-MAY-2017 10:30:17 AM','dd-Mon-yyyy hh:mi:ss PM'),
+      null,
+      1
+    );
+
+  insert
+  into
+    fs_diner values
+    (
+      6,
+      (
+        select
+          food_item_no
+        from
+          fooditem
+        where
+          food_name = 'Ravioli Ricotta'
+      )
+      ,
+      'SM',
+      1,
+      'O'
+    );
+  insert
+  into
+    fs_diner values
+    (
+      6,
+      (
+        select
+          food_item_no
+        from
+          fooditem
+        where
+          food_name = 'Classic Chocolate Mousse'
+      )
+      ,
+      'ST',
+      2,
+      'O'
+    );
+  insert
+  into
+    fs_diner values
+    (
+      6,
+      (
+        select
+          food_item_no
+        from
+          fooditem
+        where
+          food_name = 'Braised Beef Brisket'
+      )
+      ,
+      'LG',
+      1,
+      'O'
+    );
+
+  update
+    fs_diner
+  set
+    fs_diner_item_served = 'S'
+  where
+    diner_no       = 6
+  and food_item_no =
+    (
+      select
+        food_item_no
+      from
+        fooditem
+      where
+        food_name = 'Ravioli Ricotta'
+    )
+  and food_serve_size = 'SM';
+
+  update
+    fs_diner
+  set
+    fs_diner_item_served = 'S'
+  where
+    diner_no       = 6
+  and food_item_no =
+    (
+      select
+        food_item_no
+      from
+        fooditem
+      where
+        food_name = 'Classic Chocolate Mousse'
+    )
+  and food_serve_size = 'ST';
+
+  update
+    fs_diner
+  set
+    fs_diner_item_served = 'S'
+  where
+    diner_no       = 6
+  and food_item_no =
+    (
+      select
+        food_item_no
+      from
+        fooditem
+      where
+        food_name = 'Braised Beef Brisket'
+    )
+  and food_serve_size = 'LG';
+
+  update
+    diner
+  set
+    diner_payment_due =
+    (
+      select
+        sum(food_serve_cost*fs_diner_no_serves)
+      from
+        food_serve s
+      join fs_diner f
+      on
+        s.food_item_no      = f.food_item_no
+      and s.food_serve_size = f.food_serve_size
+      where
+        diner_no = 6
+    )
+  where
+    diner_no = 6;
+
+  update
+    diner
+  set
+    diner_completed = to_date('11-MAY-2017 12:05:00 PM',
+    'dd-Mon-yyyy hh:mi:ss PM')
+  where
+    diner_no = 6;
   commit;
 
   -- diner 4
@@ -561,10 +515,11 @@ is
           food_name = 'Braised Beef Brisket'
       )
       ,
-      'LG',
-      2,
+      'ST',
+      3,
       'O'
     );
+    
   insert
   into
     fs_diner values
@@ -576,47 +531,30 @@ is
         from
           fooditem
         where
-          food_name = 'Corona Beer'
+          food_name = 'Spaghetti Marinara'
+      )
+      ,
+      'ST',
+      1,
+      'O'
+    );
+    
+  insert
+  into
+    fs_diner values
+    (
+      7,
+      (
+        select
+          food_item_no
+        from
+          fooditem
+        where
+          food_name = 'House White (Glass)'
       )
       ,
       'ST',
       4,
-      'O'
-    );
-  insert
-  into
-    fs_diner values
-    (
-      7,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'Arancini Balls'
-      )
-      ,
-      'ST',
-      2,
-      'O'
-    );
-  insert
-  into
-    fs_diner values
-    (
-      7,
-      (
-        select
-          food_item_no
-        from
-          fooditem
-        where
-          food_name = 'Classic Chocolate Mousse'
-      )
-      ,
-      'ST',
-      3,
       'O'
     );
 
@@ -635,7 +573,7 @@ is
       where
         food_name = 'Braised Beef Brisket'
     )
-  and food_serve_size = 'LG';
+  and food_serve_size = 'ST';
 
   update
     fs_diner
@@ -650,7 +588,7 @@ is
       from
         fooditem
       where
-        food_name = 'Corona Beer'
+        food_name = 'Spaghetti Marinara'
     )
   and food_serve_size = 'ST';
 
@@ -667,37 +605,9 @@ is
       from
         fooditem
       where
-        food_name = 'Arancini Balls'
+        food_name = 'House White (Glass)'
     )
   and food_serve_size = 'ST';
-
-  update
-    fs_diner
-  set
-    fs_diner_item_served = 'S'
-  where
-    diner_no       = 7
-  and food_item_no =
-    (
-      select
-        food_item_no
-      from
-        fooditem
-      where
-        food_name = 'Classic Chocolate Mousse'
-    )
-  and food_serve_size = 'ST';
-
-  select
-    sum(food_serve_cost*fs_diner_no_serves)
-  from
-    food_serve s
-  join fs_diner f
-  on
-    s.food_item_no      = f.food_item_no
-  and s.food_serve_size = f.food_serve_size
-  where
-    diner_no = 7;
 
   update
     diner
@@ -783,7 +693,7 @@ commit;
     (
       fooditem_food_item_no_seq.currval,
       'ST',
-      2039,30
+      1784,12
     );
   commit;
 
@@ -795,8 +705,6 @@ commit;
   -- serve
   -- ('ST') main food items ('M' food type) by 15%, make this change in the
   -- database
-
-
 
   update
     food_serve
@@ -844,7 +752,6 @@ commit;
   -- yet, this is
   -- an order only
 
-
   insert
   into
     fs_diner values
@@ -870,7 +777,6 @@ commit;
   -- are served to
   -- this diner - update the database to record this service.
 
- 
 
   update
     fs_diner
@@ -915,66 +821,32 @@ commit;
   -- Task 4.1 Collection of Diner information
 
   create
-    table diner_info
+    table diner_record
     (
-      diner_inf_no          number(8) not null,
+      diner_id          number(8) not null,
       name                  varchar(50) not null,
       contact_mobile_number number(10),
       email_address         varchar(50),
-      receive_special_event char(1) not null
+      receive_special_event char(1) not null  //receive_special_event这个名字要改一下！是用来确定用餐者到底接不接收广告。
     );
 
-  alter table diner_info add constraint chk_receive_special_event check (
-  receive_special_event in ( 'Y','N' ) );
+  alter table diner_record add constraint chk_receive_special_event check (
+  receive_special_event in ( 'Y','N' ) );  //同上这个名字也要改一下！
 
-  alter table diner_info add constraint diner_info_pk primary key (diner_inf_no
+  alter table diner_record add constraint diner_record_pk primary key (diner_id
   );
 
-create sequence diner_info_diner_inf_no_seq start with 1 increment by 1;
+create sequence diner_record_diner_id_seq start with 1 increment by 1;
 
-  alter table diner add diner_inf_no number(8);
+  alter table diner add diner_id number(8);
 
-  alter table diner add constraint diner_diner_info_fk foreign key (
-  diner_inf_no) references diner_info (diner_inf_no) not deferrable;
+  alter table diner add constraint diner_diner_record_fk foreign key (
+  diner_id) references diner_record (diner_id) not deferrable;
 
   commit;
 
-  select
-    *
-  from
-    diner_info;
-
-  select
-    *
-  from
-    diner;
 
   -- Task 4.2 End of financial year DINER and FS_DINER archive
-
-  select
-    diner_no,
-    diner_payment_due,
-    diner_seated,
-    diner_completed,
-    diner_inf_no
-  from
-    diner
-  where
-    diner_completed < to_date('01-July-2017','dd-Mon-yyyy');
-
-  select
-    f.diner_no,
-    food_item_no,
-    food_serve_size,
-    fs_diner_no_serves,
-    fs_diner_item_served
-  from
-    fs_diner f
-  join diner d
-  on
-    f.diner_no = d.diner_no
-  where
-    diner_completed < to_date('01-July-2017','dd-Mon-yyyy');
 
   create
     table diner_history as
@@ -984,18 +856,20 @@ create sequence diner_info_diner_inf_no_seq start with 1 increment by 1;
         diner_payment_due,
         diner_seated,
         diner_completed,
-        diner_inf_no
+        diner_id
       from
         diner
       where
+        diner_completed >= to_date('01-July-2016','dd-Mon-yyyy')
+      and 
         diner_completed < to_date('01-July-2017','dd-Mon-yyyy')
     );
 
   alter table diner_history add constraint diner_history_pk primary key (
   diner_no);
 
-  alter table diner_history add constraint diner_history_diner_info_fk foreign
-  key (diner_inf_no) references diner_info (diner_inf_no) not deferrable;
+  alter table diner_history add constraint diner_history_diner_record_fk foreign
+  key (diner_id) references diner_record (diner_id) not deferrable;
 
   create
     table fs_diner_history as
@@ -1012,16 +886,18 @@ create sequence diner_info_diner_inf_no_seq start with 1 increment by 1;
       on
         f.diner_no = d.diner_no
       where
+        diner_completed >= to_date('01-July-2016','dd-Mon-yyyy')
+      and 
         diner_completed < to_date('01-July-2017','dd-Mon-yyyy')
     );
 
   alter table fs_diner_history add constraint fs_diner_history_pk primary key (
   diner_no,food_item_no,food_serve_size);
 
-  alter table fs_diner_history add constraint history_fs_diner_diner_fk foreign
-  key (diner_no) -- history_fs_diner_diner_fk is
-  -- fs_diner_history_diner_history_pk
+  alter table fs_diner_history add constraint fs_diner_history_diner_history_fk foreign key (
+    diner_no) 
   references diner_history (diner_no) not deferrable;
+                                           //fs_diner_history_diner_history_fk这个名字过长了 你自己改
 
   alter table fs_diner_history add constraint fs_diner_history_food_serve_fk
   foreign key (food_item_no,food_serve_size) references food_serve (
@@ -1031,59 +907,19 @@ create sequence diner_info_diner_inf_no_seq start with 1 increment by 1;
   from
     fs_diner
   where
-    diner_no  = 1
-  or diner_no = 3
-  or diner_no = 4
-  or diner_no = 7;
+    diner_no in (select diner_no
+  from 
+    diner
+  where 
+    diner_completed >= to_date('01-July-2016','dd-Mon-yyyy')
+  and diner_completed < to_date('01-July-2017','dd-Mon-yyyy'));
 
   delete
   from
     diner
   where
-    diner_no  = 1
-  or diner_no = 3
-  or diner_no = 4
-  or diner_no = 7;
-
-  select
-    diner_no,
-    diner_payment_due,
-    to_char(diner_seated,'dd-Mon-yyyy hh:mi:ss PM')    as diner_seated,
-    to_char(diner_completed,'dd-Mon-yyyy hh:mi:ss PM') as diner_completed,
-    diner_inf_no
-  from
-    diner_history;
-
-  select
-    *
-  from
-    diner_history;
-
-  select
-    diner_no,
-    diner_payment_due,
-    diner_seat_no,
-    to_char(diner_seated,'dd-Mon-yyyy hh:mi:ss PM')    as diner_seated,
-    to_char(diner_completed,'dd-Mon-yyyy hh:mi:ss PM') as diner_completed,
-    table_no,
-    diner_inf_no
-  from
-    diner;
-
-  select
-    *
-  from
-    diner;
-
-  select
-    *
-  from
-    fs_diner_history;
-
-  select
-    *
-  from
-    fs_diner;
+    diner_completed >= to_date('01-July-2016','dd-Mon-yyyy')
+  and diner_completed < to_date('01-July-2017','dd-Mon-yyyy');
 
   commit;
 
